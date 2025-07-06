@@ -9,11 +9,10 @@ async function uploadToIPFS() {
   status.innerText = "⏳ Uploading to IPFS (Pinata)...";
 
   // ==== PASTE YOUR PINATA CREDENTIALS HERE ====
-  const PINATA_API_KEY = 'YOUR_PINATA_API_KEY';
-  const PINATA_API_SECRET = 'YOUR_PINATA_API_SECRET';
+  const PINATA_API_KEY = '0fbe41ce2bba12f9909f';
+  const PINATA_API_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2MDU0ZjI0Ni1jMmZmLTRlZjQtYjVhZC1kNDE5NDQ2NGMyYTUiLCJlbWFpbCI6Im1hY3oueGl2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIwZmJlNDFjZTJiYmExMmY5OTA5ZiIsInNjb3BlZEtleVNlY3JldCI6ImE2MTdlZmQ5Y2I3YmM2YjQzZDNjYzlmYmIyYmM1NTQ2ZjM4NTIwNzY4YWUwZTE0MWMyZDAwYTVjOTQ0Yzg4MzYiLCJleHAiOjE3ODMzMzg1OTR9.GS8-JyFeRl_pcMm2dXmmxIAIjJMEjyk-u0L7I1XrKTc';
   // ============================================
 
-  // Pinata requires a FormData POST
   const formData = new FormData();
   formData.append('file', fileInput, fileInput.name);
 
@@ -21,7 +20,6 @@ async function uploadToIPFS() {
     const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
       method: "POST",
       headers: {
-        // You must NOT set Content-Type here; browser will set proper boundary for FormData
         'pinata_api_key': PINATA_API_KEY,
         'pinata_secret_api_key': PINATA_API_SECRET
       },
