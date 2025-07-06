@@ -2,77 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D NFT Uploader</title>
-
-  <!-- ✅ Inline styles for simple layout -->
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 2em;
-      background-color: #f0f0f0;
-      color: #333;
-    }
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 1em;
-    }
-    #dropzone {
-      width: 100%;
-      height: 150px;
-      border: 2px dashed #999;
-      border-radius: 8px;
-      background-color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #666;
-      margin-bottom: 1em;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
-      font-size: 1em;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    #status {
-      margin-top: 1em;
-      font-weight: bold;
-      color: #444;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
+    <h1>🪐 Upload Your 3D NFT to IPFS</h1>
+    <input type="file" id="fileInput" accept=".glb,.gltf,.obj"/>
+    <button id="uploadBtn">Upload to IPFS</button>
+    <div id="result"></div>
+  </div>
 
-  <h1>🎨 Upload & Mint Your 3D NFT</h1>
+  <script type="module">
+    import uploadToIPFS from './upload.js';
 
-  <button onclick="connectWallet()">🔗 Connect Wallet</button>
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const resultDiv = document.getElementById('result');
 
-  <div id="dropzone">📥 Drag & Drop your 3D file here (.glb, .obj, .fbx, etc.)</div>
+    uploadBtn.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) return alert('Choose a file first!');
 
-  <input id="tokenURI" type="text" placeholder="IPFS link will appear here after upload" />
-
-  <button onclick="uploadToIPFS()">Upload to IPFS</button>
-  <button onclick="mintGlbNFT()">Mint NFT</button>
-
-  <div id="status">⏳ Waiting for action...</div>
-
-  <!-- ✅ Ethers.js hosted locally or sanitized CDN build -->
-  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.esm.min.js" type="module"></script>
-
-  <!-- ✅ Load your custom logic -->
-  <script type="module" src="app.js"></script>
-
+      const response = await uploadToIPFS(file);
+      if (response?.IpfsHash) {
+        resultDiv.innerHTML = `
+          <p>✅ Success! IPFS Hash:</p>
+          <code>${response.IpfsHash}</code>
+          <p><a href="https://gateway.pinata.cloud/ipfs/${response.IpfsHash}" target="_blank">View File</a></p>
+        `;
+      } else {
+        resultDiv.textContent = '❌ Upload failed. Check console for details.';
+      }
+    });
+  </script>
 </body>
 </html>
