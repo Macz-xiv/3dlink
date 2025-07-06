@@ -5,34 +5,61 @@
   <title>3DLink NFT Minting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ✅ Load ethers.js from Cloudflare CDN with cache busting -->
+  <!-- Load ethers.js from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js?v=2" crossorigin="anonymous"></script>
 
-  <!-- 👇 Manually expose ethers to the global scope -->
+  <!-- Make ethers globally accessible -->
   <script>
     window.ethers = ethers;
-    console.log("✅ ethers is now available globally:", typeof ethers);
+    console.log("✅ ethers available globally:", typeof ethers);
   </script>
 
-  <!-- 💡 Your custom logic (connect wallet, mint, etc) -->
+  <!-- Load custom logic -->
   <script src="app.js" defer></script>
 
-  <!-- 🎨 Optional styling -->
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    #dropzone {
+      width: 100%;
+      max-width: 400px;
+      height: 150px;
+      border: 2px dashed #aaa;
+      line-height: 150px;
+      text-align: center;
+      margin-bottom: 20px;
+      background-color: #fafafa;
+      transition: border-color 0.3s;
+    }
+
+    input, button {
+      margin-bottom: 12px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    #status {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>🎨 Mint Your .glb 3D NFT</h1>
 
-  <!-- 🔐 Wallet connection -->
-  <button onclick="connectWallet()">Connect Wallet</button><br><br>
+  <!-- Drag-and-drop upload -->
+  <div id="dropzone">Drop your .glb file here</div>
 
-  <!-- 🔗 Token URI input -->
-  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL" /><br><br>
+  <!-- Hidden input gets filled from drop or manual paste -->
+  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL" size="50" /><br>
 
-  <!-- 🪙 Mint NFT -->
-  <button onclick="mintGlbNFT()">Mint NFT</button>
+  <button onclick="connectWallet()">🔐 Connect Wallet</button><br>
+  <button onclick="mintGlbNFT()">🪙 Mint NFT</button>
 
-  <!-- 📣 Feedback output -->
   <p id="status"></p>
 </body>
 </html>
