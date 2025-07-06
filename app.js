@@ -1,29 +1,30 @@
-const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
-const path = require('path');
+// ✅ Replace this with your full JWT securely
+const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2...GG4'; // No line breaks or trailing commas
 
-// ✅ Replace with your file path
-const filePath = path.resolve('C:/Users/HP/Desktop/1/HelloEtherlink.glb');
-
-// ✅ Your new JWT token
-const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // (truncated for security; paste your full token here)
-
-async function uploadToIPFS() {
-  const form = new FormData();
-  form.append('file', fs.createReadStream(filePath));
+export default async function uploadToIPFS(file) {
+  const formData = new FormData();
+  formData.append('file', file);
 
   try {
-    const res = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', form, {
+    const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${JWT}`,
-        ...form.getHeaders()
-      }
+        Authorization: `Bearer ${JWT}`
+      },
+      body: formData
     });
-    console.log('🚀 File pinned successfully:', res.data);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Upload failed → ${JSON.stringify(errorData)}`);
+    }
+
+    const data = await response.json();
+    console.log('🚀 IPFS response:', data);
+    return data;
+
   } catch (error) {
-    console.error('❌ Upload failed:', error.response?.data || error.message);
+    console.error('❌ IPFS error:', error.message);
+    return null;
   }
 }
-
-uploadToIPFS();
