@@ -5,26 +5,24 @@
   <title>3DLink NFT Minting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ✅ Load ethers.js BEFORE app.js from a stable CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+  <!-- ✅ Load ethers.js from Cloudflare CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" crossorigin="anonymous"></script>
+
+  <!-- Your logic (only runs after ethers is loaded) -->
   <script src="app.js" defer></script>
 
-  <!-- Link to custom CSS -->
+  <!-- Optional CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>🎨 Mint Your .glb 3D NFT</h1>
 
-  <!-- Wallet connection -->
   <button onclick="connectWallet()">Connect Wallet</button><br><br>
 
-  <!-- URL input for the .glb model -->
   <input type="text" id="tokenURI" placeholder="Paste your .glb file URL" /><br><br>
 
-  <!-- Mint button -->
   <button onclick="mintGlbNFT()">Mint NFT</button>
 
-  <!-- Output area for feedback -->
   <p id="status"></p>
 </body>
 </html>
