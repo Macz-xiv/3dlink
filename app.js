@@ -58,8 +58,7 @@ async function uploadToIPFS() {
 
   status.innerText = "⏳ Uploading to IPFS...";
 
-  // ✅ Replace with your actual JWT from Pinata scoped key
-  const JWT = "your-jwt-token-goes-here";
+  const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2MDU0ZjI0Ni1jMmZmLTRlZjQtYjVhZC1kNDE5NDQ2NGMyYTUiLCJlbWFpbCI6Im1hY3oueGl2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIxZjE3NzM4ZTU3NGJhNTFjZWFiYiIsInNjb3BlZEtleVNlY3JldCI6IjhjZGIzZTRmMWQzNmI1ZTJjNjkxNDA4MDU1MDdhYzhjYmE2YjBkNDM1YmExZWZmOGJlZTQ1ODQyYjllMzM2ZjQiLCJleHAiOjE3ODMzNjc1MDF9.5Z3ovs6iI0w6Z55DBLz5s6aIk-TAYr058SC25zZEtes";
 
   const formData = new FormData();
   formData.append("file", fileInput, fileInput.name);
