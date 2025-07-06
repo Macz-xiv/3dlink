@@ -58,7 +58,8 @@ async function uploadToIPFS() {
 
   status.innerText = "⏳ Uploading to IPFS...";
 
-  const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2MDU0ZjI0Ni1jMmZmLTRlZjQtYjVhZC1kNDE5NDQ2NGMyYTUiLCJlbWFpbCI6Im1hY3oueGl2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJiNDllZGQxOWY4ZmIwNmFiYWQwNSIsInNjb3BlZEtleVNlY3JldCI6ImIyOTMzMjQwYjVlNmNlNDU4ZjFhYTM2ODVlMWNmMzk4ZDk2YjBlZTQwNTc5MWM0ZTI1NWUyMDQ1ZjBmNGYxNWYiLCJleHAiOjE3ODMzNTI5MzF9.5XaCjt4irTIpWLZejl7Awy7IEhrQ25MGRGoKfwzX-to";
+  // ✅ Replace with your actual JWT from Pinata scoped key
+  const JWT = "your-jwt-token-goes-here";
 
   const formData = new FormData();
   formData.append("file", fileInput, fileInput.name);
@@ -83,3 +84,39 @@ async function uploadToIPFS() {
     input.value = url;
     status.innerText = `✅ Uploaded to IPFS: ${url}`;
   } catch (err) {
+    console.error("❌ IPFS error:", err);
+    status.innerText = "❌ Upload failed.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const dropzone = document.getElementById("dropzone");
+  const input = document.getElementById("tokenURI");
+
+  dropzone.addEventListener("dragover", e => {
+    e.preventDefault();
+    dropzone.style.borderColor = "#4CAF50";
+  });
+
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.style.borderColor = "#aaa";
+  });
+
+  dropzone.addEventListener("drop", e => {
+    e.preventDefault();
+    dropzone.style.borderColor = "#aaa";
+
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+
+    if (!allowed3DExts.some(ext => file.name.toLowerCase().endsWith(ext))) {
+      alert("Only 3D files allowed.");
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    input.value = url;
+    window.dropped3DFile = file;
+    document.getElementById("status").innerText = `📦 Ready: ${file.name}`;
+  });
+});
