@@ -1,3 +1,40 @@
+const contractAddress = "0x355876A4b0A4F3f97D54900441AeDD7719869601";
+const abi = ["function mintNFT(string memory tokenURI) public"];
+
+let signer;
+const allowed3DExts = [".glb", ".gltf", ".obj", ".fbx", ".dae", ".3ds", ".stl"];
+
+async function connectWallet() {
+  if (!window.ethereum) return alert("MetaMask not found. Please install it.");
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  signer = provider.getSigner();
+  const address = await signer.getAddress();
+  document.getElementById("status").innerText = `✅ Connected: ${address}`;
+}
+
+async function mintGlbNFT() {
+  if (!signer) return alert("Please connect your wallet first.");
+  const tokenURI = document.getElementById("tokenURI").value.trim();
+  if (tokenURI.startsWith("blob:")) {
+    alert("You must upload your file to IPFS or a public URL before minting. Blob URLs cannot be used for on-chain NFTs.");
+    return;
+  }
+  if (!allowed3DExts.some(ext => tokenURI.toLowerCase().endsWith(ext))) {
+    return alert("Invalid 3D file or URL.");
+  }
+  const contract = new ethers.Contract(contractAddress, abi, signer);
+  try {
+    const tx = await contract.mintNFT(tokenURI);
+    document.getElementById("status").innerText = "⏳ Minting... please wait.";
+    await tx.wait();
+    document.getElementById("status").innerText = "✅ NFT minted successfully!";
+  } catch (err) {
+    console.error("❌ Minting failed:", err);
+    document.getElementById("status").innerText = "❌ Minting failed. Check console.";
+  }
+}
+
 async function uploadToIPFS() {
   const input = document.getElementById("tokenURI");
   const status = document.getElementById("status");
@@ -8,10 +45,10 @@ async function uploadToIPFS() {
   }
   status.innerText = "⏳ Uploading to IPFS (Pinata)...";
 
-  // ==== PASTE YOUR PINATA CREDENTIALS HERE ====
+  // ==== Pinata Credentials ====
   const PINATA_API_KEY = '0fbe41ce2bba12f9909f';
   const PINATA_API_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI2MDU0ZjI0Ni1jMmZmLTRlZjQtYjVhZC1kNDE5NDQ2NGMyYTUiLCJlbWFpbCI6Im1hY3oueGl2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIwZmJlNDFjZTJiYmExMmY5OTA5ZiIsInNjb3BlZEtleVNlY3JldCI6ImE2MTdlZmQ5Y2I3YmM2YjQzZDNjYzlmYmIyYmM1NTQ2ZjM4NTIwNzY4YWUwZTE0MWMyZDAwYTVjOTQ0Yzg4MzYiLCJleHAiOjE3ODMzMzg1OTR9.GS8-JyFeRl_pcMm2dXmmxIAIjJMEjyk-u0L7I1XrKTc';
-  // ============================================
+  // ===========================
 
   const formData = new FormData();
   formData.append('file', fileInput, fileInput.name);
@@ -39,3 +76,31 @@ async function uploadToIPFS() {
     status.innerText = "❌ Pinata IPFS upload failed. Check console.";
   }
 }
+
+// Drag-and-drop logic
+document.addEventListener("DOMContentLoaded", () => {
+  const dropzone = document.getElementById("dropzone");
+  const input = document.getElementById("tokenURI");
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = "#4CAF50";
+  });
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.style.borderColor = "#aaa";
+  });
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = "#aaa";
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const lowerName = file.name.toLowerCase();
+    if (!allowed3DExts.some(ext => lowerName.endsWith(ext))) {
+      alert("Only 3D files allowed: " + allowed3DExts.join(", "));
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    input.value = url;
+    window.dropped3DFile = file;
+    document.getElementById("status").innerText = `📦 File ready: ${file.name} (${file.type || 'unknown type'})`;
+  });
+});
