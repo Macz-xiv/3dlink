@@ -2,80 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3DLink NFT Minting</title>
+  <title>3D NFT Minting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Load ethers.js with cache buster -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js?v=2" crossorigin="anonymous"></script>
-  <script>
-    window.ethers = ethers;
-    console.log("✅ ethers is now globally available:", typeof ethers);
-  </script>
-
-  <!-- App logic -->
+  <!-- Load ethers.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
   <script src="app.js" defer></script>
-
-  <!-- Styling -->
-  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      text-align: center;
-    }
-
     #dropzone {
       border: 2px dashed #aaa;
-      padding: 40px;
-      margin-bottom: 20px;
-      background-color: #fafafa;
-      transition: border-color 0.3s ease;
+      border-radius: 8px;
+      padding: 2em;
+      text-align: center;
+      color: #555;
+      margin-bottom: 1em;
       cursor: pointer;
     }
-
-    input, button {
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    button {
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #status {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #333;
-    }
+    button { margin: 0.5em; }
+    #status { margin-top: 1em; }
   </style>
 </head>
 <body>
-  <h1>🎨 Mint Your 3D .glb NFT</h1>
+  <h1>🎨 Mint Your 3D NFT</h1>
+  <div id="dropzone">Drop your 3D model file here (.glb, .gltf, .obj, .fbx, ...)</div>
+  <input type="text" id="tokenURI" placeholder="Paste your 3D file URL (or use dropzone)" style="width:100%" />
 
-  <!-- Drag-and-Drop Upload -->
-  <div id="dropzone">Drop your .glb file here</div>
-
-  <!-- URL Input -->
-  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL (or use dropzone)" />
-
-  <!-- Buttons -->
-  <button onclick="connectWallet()">🔐 Connect Wallet</button>
-  <button onclick="mintGlbNFT()">🪙 Mint NFT</button>
-
-  <!-- Status Message -->
+  <div>
+    <button onclick="connectWallet()">🔐 Connect Wallet</button>
+    <button onclick="uploadToIPFS()">☁️ Upload to IPFS</button>
+    <button onclick="mintGlbNFT()">🪙 Mint NFT</button>
+  </div>
   <p id="status"></p>
 </body>
 </html>
