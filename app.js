@@ -58,8 +58,8 @@ async function uploadToIPFS() {
 
   status.innerText = "⏳ Uploading to IPFS...";
 
-  const PINATA_API_KEY = "0fbe41ce2bba12f9909f";
-  const PINATA_SECRET_API_KEY = "a617efd9cb7bc6b43d3cc9fbb2bc5546f38520768ae0e141c2d00a5c944c8836";
+  const PINATA_API_KEY = "b49edd19f8fb06abad05";
+  const PINATA_SECRET_API_KEY = "b2933240b5e6ce458f1aa3685e1cf398d96b0ee405791c4e255e2045f0f4f15f";
 
   const formData = new FormData();
   formData.append("file", fileInput, fileInput.name);
