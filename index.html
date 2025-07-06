@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>GLB NFT Marketplace</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>3DLink NFT Minting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Ethers.js library -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+
+  <!-- Your app logic -->
   <script src="app.js" defer></script>
+
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Mint Your .glb NFT</h1>
+  <h1>🎨 Mint Your .glb 3D NFT</h1>
 
-  <button onclick="connectWallet()">Connect Wallet</button>
-  <input type="text" id="tokenURI" placeholder="Enter .glb file URL">
+  <button onclick="connectWallet()">Connect Wallet</button><br>
+
+  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL"><br>
+
   <button onclick="mintGlbNFT()">Mint NFT</button>
 
   <p id="status"></p>
