@@ -5,61 +5,77 @@
   <title>3DLink NFT Minting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Load ethers.js from CDN -->
+  <!-- Load ethers.js with cache buster -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js?v=2" crossorigin="anonymous"></script>
-
-  <!-- Make ethers globally accessible -->
   <script>
     window.ethers = ethers;
-    console.log("✅ ethers available globally:", typeof ethers);
+    console.log("✅ ethers is now globally available:", typeof ethers);
   </script>
 
-  <!-- Load custom logic -->
+  <!-- App logic -->
   <script src="app.js" defer></script>
 
+  <!-- Styling -->
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
       padding: 20px;
+      text-align: center;
     }
 
     #dropzone {
-      width: 100%;
-      max-width: 400px;
-      height: 150px;
       border: 2px dashed #aaa;
-      line-height: 150px;
-      text-align: center;
+      padding: 40px;
       margin-bottom: 20px;
       background-color: #fafafa;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
     }
 
     input, button {
-      margin-bottom: 12px;
+      margin: 10px 0;
       padding: 10px;
-      font-size: 1rem;
+      font-size: 16px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
     }
 
     #status {
+      margin-top: 15px;
       font-weight: bold;
-      margin-top: 10px;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <h1>🎨 Mint Your .glb 3D NFT</h1>
+  <h1>🎨 Mint Your 3D .glb NFT</h1>
 
-  <!-- Drag-and-drop upload -->
+  <!-- Drag-and-Drop Upload -->
   <div id="dropzone">Drop your .glb file here</div>
 
-  <!-- Hidden input gets filled from drop or manual paste -->
-  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL" size="50" /><br>
+  <!-- URL Input -->
+  <input type="text" id="tokenURI" placeholder="Paste your .glb file URL (or use dropzone)" />
 
-  <button onclick="connectWallet()">🔐 Connect Wallet</button><br>
+  <!-- Buttons -->
+  <button onclick="connectWallet()">🔐 Connect Wallet</button>
   <button onclick="mintGlbNFT()">🪙 Mint NFT</button>
 
+  <!-- Status Message -->
   <p id="status"></p>
 </body>
 </html>
