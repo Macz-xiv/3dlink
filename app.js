@@ -3,6 +3,9 @@ const abi = ["function mintNFT(string memory tokenURI) public"];
 
 let signer;
 
+// Allowed 3D extensions (add/remove as needed)
+const allowed3DExts = [".glb", ".gltf", ".obj", ".fbx", ".dae", ".3ds", ".stl"];
+
 // Connect MetaMask wallet
 async function connectWallet() {
   if (!window.ethereum) return alert("MetaMask not found. Please install it.");
@@ -18,10 +21,14 @@ async function connectWallet() {
 // Mint NFT using tokenURI
 async function mintGlbNFT() {
   if (!signer) return alert("Please connect your wallet first.");
-  
+
   const tokenURI = document.getElementById("tokenURI").value.trim();
-  if (!tokenURI.endsWith(".glb") && !tokenURI.startsWith("blob:")) {
-    return alert("Invalid .glb file or URL.");
+  if (tokenURI.startsWith("blob:")) {
+    alert("You must upload your file to IPFS or a public URL before minting. Blob URLs cannot be used for on-chain NFTs.");
+    return;
+  }
+  if (!allowed3DExts.some(ext => tokenURI.toLowerCase().endsWith(ext))) {
+    return alert("Invalid 3D file or URL.");
   }
 
   const contract = new ethers.Contract(contractAddress, abi, signer);
@@ -56,13 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
     dropzone.style.borderColor = "#aaa";
 
     const file = e.dataTransfer.files[0];
-    if (!file || !file.name.endsWith(".glb")) {
-      alert("Only .glb files allowed.");
+    if (!file) return;
+
+    const lowerName = file.name.toLowerCase();
+    if (!allowed3DExts.some(ext => lowerName.endsWith(ext))) {
+      alert("Only 3D files allowed: " + allowed3DExts.join(", "));
       return;
     }
 
     const url = URL.createObjectURL(file);
     input.value = url;
-    document.getElementById("status").innerText = `📦 File ready: ${file.name}`;
+    document.getElementById("status").innerText = `📦 File ready: ${file.name} (${file.type || 'unknown type'})`;
   });
 });
