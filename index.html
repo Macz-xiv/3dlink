@@ -2,38 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3D NFT Uploader</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Mint Your 3D NFT on Etherlink</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🪐 Upload Your 3D NFT to IPFS</h1>
-    <input type="file" id="fileInput" accept=".glb,.gltf,.obj"/>
-    <button id="uploadBtn">Upload to IPFS</button>
+    <h1>🚀 3D NFT Minter</h1>
+    <input type="file" id="fileInput" accept=".glb" />
+    <button id="uploadMintBtn">Upload & Mint</button>
     <div id="result"></div>
   </div>
 
   <script type="module">
     import uploadToIPFS from './upload.js';
+    import mintNFT from './mint.js';
 
+    const uploadMintBtn = document.getElementById('uploadMintBtn');
     const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
     const resultDiv = document.getElementById('result');
 
-    uploadBtn.addEventListener('click', async () => {
+    uploadMintBtn.addEventListener('click', async () => {
       const file = fileInput.files[0];
-      if (!file) return alert('Choose a file first!');
+      if (!file) return alert('Please choose a .glb file.');
+
+      resultDiv.textContent = '⏳ Uploading to IPFS...';
 
       const response = await uploadToIPFS(file);
-      if (response?.IpfsHash) {
-        resultDiv.innerHTML = `
-          <p>✅ Success! IPFS Hash:</p>
-          <code>${response.IpfsHash}</code>
-          <p><a href="https://gateway.pinata.cloud/ipfs/${response.IpfsHash}" target="_blank">View File</a></p>
-        `;
+      if (!response?.IpfsHash) return resultDiv.textContent = '❌ Upload failed.';
+
+      const ipfsURL = `https://gateway.pinata.cloud/ipfs/${response.IpfsHash}`;
+      resultDiv.innerHTML = `✅ Uploaded: <a href="${ipfsURL}" target="_blank">View</a><br>⛓ Minting NFT...`;
+
+      const mintTx = await mintNFT(ipfsURL);
+      if (mintTx) {
+        resultDiv.innerHTML += `<br>🎉 NFT Minted: <a href="https://explorer.etherlink.io/tx/${mintTx.hash}" target="_blank">View on Etherlink</a>`;
       } else {
-        resultDiv.textContent = '❌ Upload failed. Check console for details.';
+        resultDiv.innerHTML += '<br>❌ Minting failed.';
       }
     });
   </script>
