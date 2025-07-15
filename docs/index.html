@@ -11,20 +11,23 @@
   <!-- Favicon (optional) -->
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
-  <!-- Minimal grayscale styling -->
-  <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #eaeaea;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-    h1 {
-      font-size: 2.5rem;
-      letter-spacing:
+<body>
+  <h1 class="logo">3&nbsp;d&nbsp;&nbsp;&nbsp;L&nbsp;i&nbsp;n&nbsp;k</h1>
+
+  <div id="form">
+    <input type="file" id="fileInput" accept=".glb" />
+    <button id="uploadMintBtn">Upload and Mint</button>
+  </div>
+
+  <div id="output">
+    <p id="status">Waiting for upload...</p>
+  </div>
+
+  <!-- External script -->
+  <script src="mint.js"></script>
+</body>
+</html>
