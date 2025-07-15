@@ -1,9 +1,12 @@
-/* Global layout */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #f2f2f2;
   color: #222;
   display: flex;
   flex-direction: column;
@@ -11,42 +14,51 @@ body {
   min-height: 100vh;
 }
 
-/* Logo heading */
+/* Logo */
 .logo {
   font-size: 2.8rem;
   letter-spacing: 0.35rem;
   color: #111;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
+  margin: 3rem 1rem 2rem;
+  text-align: center;
 }
 
-/* Card-style form container */
+/* Main content */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 420px;
+  padding: 0 1rem 3rem;
+}
+
+/* Form container */
 #form {
   background-color: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
+  gap: 1rem;
 }
 
-/* File input styling */
+/* File input */
 input[type="file"] {
   padding: 0.6rem;
   font-size: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  background-color: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fbfbfb;
   width: 100%;
 }
 
-/* Upload and Mint button */
+/* Button */
 button {
-  padding: 0.7rem 1.4rem;
+  padding: 0.75rem;
   background-color: #444;
   color: #fff;
   border: none;
@@ -61,13 +73,14 @@ button:hover {
   background-color: #666;
 }
 
-/* Output area styling */
+/* Output */
 #output {
-  margin-top: 2rem;
+  width: 100%;
+  text-align: center;
 }
 
 #status {
   font-style: italic;
-  color: #555;
-  text-align: center;
+  color: #666;
+  margin-top: 0.5rem;
 }
