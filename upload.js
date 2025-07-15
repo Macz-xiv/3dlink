@@ -1,0 +1,21 @@
+const JWT = 'YOUR_FULL_SCOPED_PINATA_JWT'; // Replace with your actual JWT
+
+export default async function uploadToIPFS(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${JWT}` },
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log('✅ IPFS Upload:', data);
+    return data;
+  } catch (err) {
+    console.error('❌ IPFS Error:', err);
+    return null;
+  }
+}
