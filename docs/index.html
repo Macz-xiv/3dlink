@@ -5,29 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3D NFT Minting</title>
 
-  <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://cdn.jsdelivr.net;">
-
-  <!-- Favicon (optional) -->
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
-
-  <!-- External stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <h1 class="logo">3&nbsp;d&nbsp;&nbsp;&nbsp;L&nbsp;i&nbsp;n&nbsp;k</h1>
 
-  <div id="form">
-    <input type="file" id="fileInput" accept=".glb" />
-    <button id="uploadMintBtn">Upload and Mint</button>
-  </div>
+  <main>
+    <section id="form">
+      <input type="file" id="fileInput" accept=".glb" />
+      <button id="uploadMintBtn">Upload and Mint</button>
+    </section>
 
-  <div id="output">
-    <p id="status">Waiting for upload...</p>
-  </div>
+    <section id="output">
+      <p id="status">Waiting for upload...</p>
+    </section>
+  </main>
 
-  <!-- External script -->
-  <script src="mint.js"></script>
-</body>
-</html>
+  <script src="mint.js"></
