@@ -1,7 +1,7 @@
 import { ethers } from 'https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js';
 
-// 🔧 Replace with your actual smart contract address
-const CONTRACT_ADDRESS = 'YOUR_ETHERLINK_CONTRACT_ADDRESS';
+// 👇 Your deployed Etherlink contract address
+const CONTRACT_ADDRESS = '0xF23419A72f2d8f6E36805ED1Cc02dB1361423208';
 
 const contractABI = [
   {
@@ -25,7 +25,11 @@ export default async function mintNFT(tokenURI) {
   try {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(window.ethereum, {
+      name: 'etherlink',
+      chainId: 42793
+    });
+
     const signer = provider.getSigner();
     const recipient = window.ethereum.selectedAddress;
 
