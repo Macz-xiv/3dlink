@@ -3,18 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3DLink v.1.0 — Mint Your 3D NFT</title>
+  <title>3DLink Legacy NFT Viewer</title>
 
   <!-- model-viewer for .glb rendering -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-  <!-- upload.js and mint.js -->
-  <script type="module" src="./upload.js"></script>
-  <script type="module" src="./mint.js"></script>
-
   <style>
     body {
-      background-color: #181818;
+      background-color: #121212;
       color: #fff;
       font-family: "Segoe UI", sans-serif;
       text-align: center;
@@ -26,9 +22,14 @@
       margin-bottom: 10px;
     }
 
-    input[type="file"] {
+    input[type="text"] {
+      width: 80%;
+      max-width: 500px;
+      padding: 10px;
       margin-top: 20px;
-      color: #ccc;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
     }
 
     button {
@@ -54,69 +55,54 @@
       background-color: #000;
     }
 
-    .status {
+    .meta {
       margin-top: 20px;
-      font-size: 0.95em;
+      font-size: 0.9em;
       color: #aaa;
       word-break: break-word;
+    }
+
+    a {
+      color: #4ad9ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <h1>Mint Your NFT on 3DLink v.1.0</h1>
+  <h1>🔍 View Your Minted 3D NFT</h1>
 
-  <input type="file" id="fileInput" accept=".glb" />
+  <input type="text" id="ipfsInput" placeholder="Enter IPFS hash (e.g. QmPvTdk...)" />
   <br/>
-  <button id="mintBtn">Upload & Mint</button>
+  <button onclick="loadNFT()">Load NFT</button>
 
-  <div id="viewerContainer" style="display:none;">
-    <model-viewer id="modelViewer" auto-rotate camera-controls ar></model-viewer>
-  </div>
+  <model-viewer id="viewer" auto-rotate camera-controls ar style="display:none;"></model-viewer>
 
-  <div class="status" id="status"></div>
+  <div class="meta" id="metaInfo"></div>
 
-  <script type="module">
-    import uploadToIPFS from './upload.js';
-    import mintNFT from './mint.js';
-
-    const fileInput = document.getElementById('fileInput');
-    const mintBtn = document.getElementById('mintBtn');
-    const modelViewer = document.getElementById('modelViewer');
-    const viewerContainer = document.getElementById('viewerContainer');
-    const statusEl = document.getElementById('status');
-
-    mintBtn.addEventListener('click', async () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert('Please select a .glb file first.');
+  <script>
+    function loadNFT() {
+      const hash = document.getElementById('ipfsInput').value.trim();
+      if (!hash) {
+        alert('Please enter a valid IPFS hash.');
         return;
       }
 
-      statusEl.textContent = '📦 Uploading to IPFS...';
-      const ipfs = await uploadToIPFS(file);
-      if (!ipfs?.IpfsHash) {
-        statusEl.textContent = '❌ IPFS upload failed.';
-        return;
-      }
+      const url = `https://gateway.pinata.cloud/ipfs/${hash}`;
+      const viewer = document.getElementById('viewer');
+      viewer.setAttribute('src', url);
+      viewer.style.display = 'block';
 
-      const ipfsURL = `https://gateway.pinata.cloud/ipfs/${ipfs.IpfsHash}`;
-      statusEl.textContent = `✅ Uploaded! Minting NFT...`;
-
-      const tx = await mintNFT(ipfsURL);
-      if (tx) {
-        statusEl.innerHTML = `
-          ✅ NFT Minted!<br/>
-          <strong>IPFS:</strong> <a href="${ipfsURL}" target="_blank">${ipfs.IpfsHash}</a><br/>
-          <strong>Tx Hash:</strong> <a href="https://explorer.etherlink.com/tx/${tx.hash}" target="_blank">${tx.hash}</a>
-        `;
-
-        modelViewer.setAttribute('src', ipfsURL);
-        viewerContainer.style.display = 'block';
-      } else {
-        statusEl.textContent = '❌ Mint failed.';
-      }
-    });
+      const meta = document.getElementById('metaInfo');
+      meta.innerHTML = `
+        <strong>IPFS Link:</strong><br/>
+        <a href="${url}" target="_blank">${hash}</a>
+      `;
+    }
   </script>
 
 </body>
