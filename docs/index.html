@@ -2,108 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3DLink Legacy NFT Viewer</title>
-
-  <!-- model-viewer for .glb rendering -->
+  <title>3DLink NFT Viewer</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
   <style>
     body {
       background-color: #121212;
       color: #fff;
-      font-family: "Segoe UI", sans-serif;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
+      font-family: "Segoe UI", sans-serif;
     }
-
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    input[type="text"] {
-      width: 80%;
-      max-width: 500px;
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 6px;
-      border: none;
-      font-size: 1em;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #4ad9ff;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #32bde0;
-    }
-
     model-viewer {
       width: 100%;
       height: 500px;
-      margin-top: 30px;
-      border-radius: 12px;
       background-color: #000;
-    }
-
-    .meta {
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: #aaa;
-      word-break: break-word;
-    }
-
-    a {
-      color: #4ad9ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
+  <h1>🎉 Minted NFT Preview</h1>
 
-  <h1>🔍 View Your Minted 3D NFT</h1>
+  <model-viewer
+    src="https://gateway.pinata.cloud/ipfs/QmPvTdkLVy5zbvctMLsSZZYPXA5HBNCF9KiFRZEooJ6o8R"
+    auto-rotate
+    camera-controls
+    ar
+  ></model-viewer>
 
-  <input type="text" id="ipfsInput" placeholder="Enter IPFS hash (e.g. QmPvTdk...)" />
-  <br/>
-  <button onclick="loadNFT()">Load NFT</button>
-
-  <model-viewer id="viewer" auto-rotate camera-controls ar style="display:none;"></model-viewer>
-
-  <div class="meta" id="metaInfo"></div>
-
-  <script>
-    function loadNFT() {
-      const hash = document.getElementById('ipfsInput').value.trim();
-      if (!hash) {
-        alert('Please enter a valid IPFS hash.');
-        return;
-      }
-
-      const url = `https://gateway.pinata.cloud/ipfs/${hash}`;
-      const viewer = document.getElementById('viewer');
-      viewer.setAttribute('src', url);
-      viewer.style.display = 'block';
-
-      const meta = document.getElementById('metaInfo');
-      meta.innerHTML = `
-        <strong>IPFS Link:</strong><br/>
-        <a href="${url}" target="_blank">${hash}</a>
-      `;
-    }
-  </script>
-
+  <p><a href="https://gateway.pinata.cloud/ipfs/QmPvTdkLVy5zbvctMLsSZZYPXA5HBNCF9KiFRZEooJ6o8R" target="_blank">IPFS Link</a></p>
 </body>
 </html>
