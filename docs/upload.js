@@ -1,4 +1,4 @@
-const JWT = 'YOUR_FULL_SCOPED_PINATA_JWT'; // Replace with your actual JWT
+const JWT = 'YOUR_FULL_SCOPED_PINATA_JWT'; // 🔒 Replace this!
 
 export default async function uploadToIPFS(file) {
   const formData = new FormData();
