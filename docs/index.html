@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3DLink v.1.0 NFT Viewer</title>
+  <title>3DLink v.1.0 — Mint Your 3D NFT</title>
 
-  <!-- model-viewer component for rendering .glb models -->
+  <!-- model-viewer for .glb rendering -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- upload.js and mint.js -->
+  <script type="module" src="./upload.js"></script>
+  <script type="module" src="./mint.js"></script>
+
   <style>
     body {
-      background-color: #1a1a1a;
-      color: #ffffff;
+      background-color: #181818;
+      color: #fff;
       font-family: "Segoe UI", sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      text-align: center;
+      padding: 30px;
     }
 
     h1 {
@@ -23,54 +26,98 @@
       margin-bottom: 10px;
     }
 
-    .nft-viewer {
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto;
-      border: 1px solid #444;
-      border-radius: 12px;
-      padding: 10px;
-      background-color: #2a2a2a;
+    input[type="file"] {
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #4ad9ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #32bde0;
     }
 
     model-viewer {
       width: 100%;
       height: 500px;
+      margin-top: 30px;
+      border-radius: 12px;
       background-color: #000;
-      border-radius: 10px;
     }
 
-    .meta {
-      margin-top: 15px;
-      font-size: 0.9em;
+    .status {
+      margin-top: 20px;
+      font-size: 0.95em;
       color: #aaa;
       word-break: break-word;
-    }
-
-    a {
-      color: #4ad9ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎉 3DLink v.1.0: Minted NFT Preview</h1>
+  <h1>Mint Your NFT on 3DLink v.1.0</h1>
 
-  <div class="nft-viewer">
-    <model-viewer
-      src="https://gateway.pinata.cloud/ipfs/QmPvTdkLVy5zbvctMLsSZZYPXA5HBNCF9KiFRZEooJ6o8R"
-      alt="Minted 3D NFT"
-      auto-rotate
-      camera-controls
-      shadow-intensity="1"
-      ar
-    ></model-viewer>
+  <input type="file" id="fileInput" accept=".glb" />
+  <br/>
+  <button id="mintBtn">Upload & Mint</button>
 
-    <div class="meta">
-      <strong>IPFS Hash:</strong><br/>
-      <a href="https://gateway.pinata.cloud/ipfs/QmPvTdkLVy5zbvctMLsS
+  <div id="viewerContainer" style="display:none;">
+    <model-viewer id="modelViewer" auto-rotate camera-controls ar></model-viewer>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <script type="module">
+    import uploadToIPFS from './upload.js';
+    import mintNFT from './mint.js';
+
+    const fileInput = document.getElementById('fileInput');
+    const mintBtn = document.getElementById('mintBtn');
+    const modelViewer = document.getElementById('modelViewer');
+    const viewerContainer = document.getElementById('viewerContainer');
+    const statusEl = document.getElementById('status');
+
+    mintBtn.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select a .glb file first.');
+        return;
+      }
+
+      statusEl.textContent = '📦 Uploading to IPFS...';
+      const ipfs = await uploadToIPFS(file);
+      if (!ipfs?.IpfsHash) {
+        statusEl.textContent = '❌ IPFS upload failed.';
+        return;
+      }
+
+      const ipfsURL = `https://gateway.pinata.cloud/ipfs/${ipfs.IpfsHash}`;
+      statusEl.textContent = `✅ Uploaded! Minting NFT...`;
+
+      const tx = await mintNFT(ipfsURL);
+      if (tx) {
+        statusEl.innerHTML = `
+          ✅ NFT Minted!<br/>
+          <strong>IPFS:</strong> <a href="${ipfsURL}" target="_blank">${ipfs.IpfsHash}</a><br/>
+          <strong>Tx Hash:</strong> <a href="https://explorer.etherlink.com/tx/${tx.hash}" target="_blank">${tx.hash}</a>
+        `;
+
+        modelViewer.setAttribute('src', ipfsURL);
+        viewerContainer.style.display = 'block';
+      } else {
+        statusEl.textContent = '❌ Mint failed.';
+      }
+    });
+  </script>
+
+</body>
+</html>
